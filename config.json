@@ -7,5 +7,6 @@
     "port": "3306",
     "database": "shortify"
   },
-  "hash": "whirlpool"
+  "hash": "whirlpool",
+  "error_log_file": "./app_error.log"
 }

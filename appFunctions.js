@@ -21,11 +21,13 @@ app.insertVisitedUrl = function(info) {
       resolve({success: true, data: null});
     });
     dbHandler.on('error', (err, data) => {
+      __logger.error(`[insert_visit_url_error]=> ${err}`);
       resolve({success: false, err: err});
     });
     try {
       dbHandler.insert('code_details', [info.code, info.timestamp, info.os, info.browser, info.ip, info.country]);
     } catch (err) {
+      __logger.error(`[insert_visited_url_error]=> ${err}`);
       reject(new Error('[insert_visited_url_error]: '+err));
     }
   });
@@ -35,7 +37,7 @@ app.insertVisitedUrl = function(info) {
  * generates code and inserts the new url
  * @param {Object} info
  * @param {string} info.url
- * @param {Date} info.time
+ * @param {Date} info.timestamp
  * @return {Promise}
  */
 app.insertNewUrl = function(info) {
@@ -44,16 +46,18 @@ app.insertNewUrl = function(info) {
     const dbHandler = new DbHandler();
     dbHandler.on('inserted', (err, data) => {
       if (!err) {
-        resolve({success: true, data: null});
+        resolve({success: true, data: {code: code}});
       }
     });
     dbHandler.on('error', (err, data) => {
+      __logger.error(`[insert_new_url_error]=> ${err}`);
       resolve({success: false, err: err});
     });
 
     try {
-      dbHandler.insert('code_url', [code, info.url, info.time]);
+      dbHandler.insert('code_url', [code, info.url, info.timestamp]);
     } catch (err) {
+      __logger.error(`[insert_new_url_error]=> ${err}`);
       reject(new Error('[insert_new_url_error]: '+err));
     }
   });
@@ -75,11 +79,13 @@ app.fetchCodeVisitDetails = function(code) {
       }
     });
     dbHandler.on('error', (err, data) => {
+      __logger.error(`[fetch_code_visit_details_error]=> ${err}`);
       resolve({success: false, err: err});
     });
     try {
       dbHandler.select('code_details', '*', 'code_details.code=', code);
     } catch (err) {
+      __logger.error(`[fetch_code_visit_details_error]: ${err}`);
       reject(new Error(`[fetch_code_visit_details_error]: ${err}`));
     }
   });
@@ -100,14 +106,16 @@ app.fetchAllCodeDetails = function() {
       }
     });
     dbHandler.on('error', (err, data) => {
+      __logger.error(`[fetch_all_code_details_error]: ${err}`);
       resolve({success: false, err: err});
     });
     try {
       dbHandler.select('code_url',
           ['code_url.code ', 'code_url.url', 'code_url.timestamp', 'count(code_details.timestamp) as visit_count'],
-          null, null, 'left', 'code_details', 'code_url.code = code_details.code', 'group', 'code_details.timestamp');
-    } catch (error) {
-      reject(new Error(`[fetch_code_visit_details_error]: ${error}`));
+          null, null, 'left', 'code_details', 'code_url.code = code_details.code', 'group', 'code_details.code');
+    } catch (err) {
+      __logger.error(`[fetch_code_visit_details_error]: ${err}`);
+      reject(new Error(`[fetch_code_visit_details_error]: ${err}`));
     }
   });
 };
@@ -129,12 +137,14 @@ app.fetchCodeUrl = function(code) {
     });
 
     dbHandler.on('error', (err, data) => {
+      __logger.error(`[fetch_code_url_error]: ${err}`);
       resolve({success: false, err: err});
     });
     try {
       dbHandler.select('code_url', 'url', 'code_url.code=', code);
-    } catch (error) {
-      reject(new Error(`[fetch_code_url_error]: ${error}`));
+    } catch (err) {
+      __logger.error(`[fetch_code_url_error]: ${err}`);
+      reject(new Error(`[fetch_code_url_error]: ${err}`));
     }
   });
 };

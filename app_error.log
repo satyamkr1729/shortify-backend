@@ -1,0 +1,2 @@
+
+[2019-10-24T02:03:53.854] [ERROR] default - [insert_new_url_error]=> [insert_error]: Error: ER_DUP_ENTRY: Duplicate entry 'https://www.codechef.com/' for key 'url_UNIQUE'
