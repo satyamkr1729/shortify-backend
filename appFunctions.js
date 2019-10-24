@@ -111,8 +111,8 @@ app.fetchAllCodeDetails = function() {
     });
     try {
       dbHandler.select('code_url',
-          ['code_url.code ', 'code_url.url', 'code_url.timestamp', 'count(code_details.timestamp) as visit_count'],
-          null, null, 'left', 'code_details', 'code_url.code = code_details.code', 'group', 'code_details.code');
+          ['code_url.code ', 'code_url.url', 'code_url.timestamp', 'count(code_details.timestamp) as visitCount'],
+          null, null, 'left', 'code_details', 'code_url.code = code_details.code', 'group', 'code_url.code');
     } catch (err) {
       __logger.error(`[fetch_code_visit_details_error]: ${err}`);
       reject(new Error(`[fetch_code_visit_details_error]: ${err}`));

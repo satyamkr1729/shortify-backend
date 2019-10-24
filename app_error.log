@@ -1,3 +1,4 @@
 [2019-10-24T05:49:04.201] [ERROR] default - [insert_new_url_error]=> [insert_error]: Error: ER_DUP_ENTRY: Duplicate entry 'https://www.codechef.com/' for key 'url_UNIQUE'
 [2019-10-24T05:49:07.885] [ERROR] default - [insert_new_url_error]=> [insert_error]: Error: ER_DUP_ENTRY: Duplicate entry 'https://www.codechef.com/' for key 'url_UNIQUE'
 [2019-10-24T05:49:13.507] [ERROR] default - [insert_new_url_error]=> [insert_error]: Error: ER_DUP_ENTRY: Duplicate entry 'https://www.codechef.com/' for key 'url_UNIQUE'
+[2019-10-24T07:49:16.537] [ERROR] default - [insert_visit_url_error]=> [insert_error]: Error: ER_BAD_NULL_ERROR: Column 'browser' cannot be null

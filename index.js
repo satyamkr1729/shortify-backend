@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const readConfig = require('jsonfile').readFileSync;
 const appFunc = require('./appFunctions');
 const logger = require('log4js');
+const cors = require('cors');
 
 // get configurations
 try {
@@ -31,7 +32,16 @@ const app = new Express();
 
 app.use(bodyParser.json());
 
-app.post('/url', (req, res) => {
+// configure cors
+const corsOptions = {
+  origin: function(origin, callback) {
+    callback(null, __config.whiteListUrls.indexOf(origin) != -1);
+  },
+};
+
+app.use(cors(corsOptions));
+
+app.post('/url', (req, res, next) => {
   let url = '';
   appFunc.fetchCodeUrl(req.query.code).then((response) => {
     if (response.success) {
@@ -56,11 +66,11 @@ app.post('/url', (req, res) => {
   }).catch((err) => {
     console.log(err);
     __logger.error('[url_fetch_error]=> '+err);
-    res.error('[url_fetch_error]: '+err);
+    next('[url_fetch_error]: '+err);
   });
 });
 
-app.get('/list', (req, res) => {
+app.get('/list', (req, res, next) => {
   appFunc.fetchAllCodeDetails().then((response) => {
     if (!response.success) {
       console.log(response.err);
@@ -69,11 +79,11 @@ app.get('/list', (req, res) => {
   }).catch((err) => {
     console.log(err);
     __logger.error('[list_error]=> '+err);
-    res.error('[list_error]: '+err);
+    next('[list_error]: '+err);
   });
 });
 
-app.get('/details', (req, res) => {
+app.get('/details', (req, res, next) => {
   appFunc.fetchCodeVisitDetails(req.query.code).then((response) => {
     if (!response.success) {
       console.log(response.err);
@@ -82,11 +92,11 @@ app.get('/details', (req, res) => {
   }).catch((err) => {
     console.log(err);
     __logger.error('[fetch_details_error]=> '+err);
-    res.error('[fetch_details_error]'+err);
+    next('[fetch_details_error]'+err);
   });
 });
 
-app.post('/add', (req, res) => {
+app.post('/add', (req, res, next) => {
   appFunc.insertNewUrl({
     url: req.body.url,
     timestamp: new Date(),
@@ -98,7 +108,7 @@ app.post('/add', (req, res) => {
   }).catch((err )=> {
     console.log(err);
     __logger.error('[insert_new_error]=> '+err);
-    res.error('[insert_new_error]: '+err);
+    next('[insert_new_error]: '+err);
   });
 });
 

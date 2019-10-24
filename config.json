@@ -9,5 +9,6 @@
     "database": "shortify"
   },
   "hash": "whirlpool",
-  "error_log_file": "./app_error.log"
+  "error_log_file": "./app_error.log",
+  "whiteListUrls": ["http://localhost:4200"]
 }
