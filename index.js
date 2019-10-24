@@ -102,5 +102,5 @@ app.post('/add', (req, res) => {
   });
 });
 
-app.listen(8081);
-console.log('[app]: server listening at port 8081');
+app.listen(__config.port);
+console.log(`[app]: server listening at port ${__config.port}`);
